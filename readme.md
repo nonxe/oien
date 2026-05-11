@@ -1,4 +1,4 @@
-# Raganork-MD
+# Raganork-wb king
 
 <p align="center">
   <a href="https://raganork.site">
@@ -136,8 +136,7 @@ raganork-md/
 
 ## Support
 
-* [Telegram Group](https://t.me/raganork_in)
-* [Official Website](https://raganork.live)
+* [Official Website](❥𝕋𝔸ℝ𝕂𝔸𝕋𝔸 𝔾ℝ𝕆𝕌ℙ...♡♡)
 
 ## Legal Notice
 
@@ -146,12 +145,25 @@ raganork-md/
 * This code is in no way affiliated, authorized, maintained, sponsored or endorsed by WhatsApp or any of its affiliates.
 * WhatsApp is a trademark of WhatsApp Inc., registered in the U.S. and other countries.
 * This software is provided for educational and research purposes only
-* Powered by [Baileys](https://github.com/WhiskeySockets/Baileys)
+* Powered by [Baileys](https://github.com/WhiskeySockets/B
 
 ## License
 
 GPL License - See LICENSE file for details.
 
 ---
+
+
+🏏 PBKS vs DC Match 55
+
+DC won by 3 wickets! 🎉🥳
+
+Get live updates of IPL 2026 on Desh Bangla Keyboard
+desh.app/bangla/c
+
+DC won by 3 wickets! 🎉🥳
+
+Get live updates of IPL 2026 on Desh Bangla Keyboard
+desh.app/bangla/c
 
 **Note:** Some files are obfuscated for security reasons and should not be modified.
