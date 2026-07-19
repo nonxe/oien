@@ -1,21 +1,22 @@
 {
-  "name": "raganork-md",
+  "name": "oien-bot",
   "version": "6.2.30",
-  "description": "A multi functional wa bot.",
+  "description": "OIEN🪐 — Sweet themed WhatsApp Bot",
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "pm2 start index.js --name raganork-md --attach"
+    "start": "node index.js"
   },
   "keywords": [
     "whatsapp",
     "bot",
     "baileys",
-    "raganork"
+    "oien"
   ],
-  "author": "Sourav K",
+  "author": "nonxe",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "express": "^4.19.2",
     "@vitalets/google-translate-api": "^9.2.1",
     "acrcloud": "^1.4.0",
     "audio-decode": "^2.2.3",

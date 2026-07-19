@@ -188,7 +188,7 @@ const baseConfig = {
   VERSION,
   ALIVE:
     process.env.ALIVE ||
-    "_I am alive! (use .setalive help for custom alive msg)_",
+    "‧₊˚ ☁️⋅♡𓂃 ࣪ ִֶָ☾.\n*OIEN🪐 IS ALIVE* 🦢˚. ᵎᵎ\n\nUptime: &uptime\nType *.menu* to see my commands!\n\n⊹܀˙ ♰ ⋆.˚",
   BLOCK_CHAT: process.env.BLOCK_CHAT || "",
   PM_ANTISPAM: convertToBool(process.env.PM_ANTISPAM) || "",
   ALWAYS_ONLINE: convertToBool(process.env.ALWAYS_ONLINE) || false,
@@ -237,14 +237,14 @@ const baseConfig = {
     "78c84c62b32a88e86daf87dd509a657a",
   ],
   RG: process.env.RG || "919074309534-1632403322@g.us,120363116963909366@g.us",
-  BOT_INFO: process.env.BOT_INFO || "𝖱𝖺𝗀𝖺𝗇𝗈𝗋𝗄;𝖱𝗒𝗓𝖾𝗇;default",
+  BOT_INFO: process.env.BOT_INFO || "OIEN🪐;nonxe;default",
   RBG_KEY: process.env.RBG_KEY || "",
   ALLOWED: process.env.ALLOWED || "91,94,2",
   NOT_ALLOWED: process.env.NOT_ALLOWED || "852",
   CHATBOT: process.env.CHATBOT || "off",
   HANDLERS: process.env.HANDLERS || ".,",
-  STICKER_DATA: process.env.STICKER_DATA || "Raganork",
-  BOT_NAME: process.env.BOT_NAME || "Raganork",
+  STICKER_DATA: process.env.STICKER_DATA || "OIEN🪐",
+  BOT_NAME: process.env.BOT_NAME || "OIEN🪐",
   AUDIO_DATA:
     process.env.AUDIO_DATA === undefined || process.env.AUDIO_DATA === "private"
       ? "default"
@@ -258,7 +258,7 @@ const baseConfig = {
   SUDO: process.env.SUDO || "",
   LANGUAGE: process.env.LANGUAGE || "english",
   AUTO_UPDATE: convertToBool(process.env.AUTO_UPDATE) || true,
-  SUPPORT_GROUP: process.env.SUPPORT_GROUP || "https://t.me/raganork_in",
+  SUPPORT_GROUP: process.env.SUPPORT_GROUP || "https://github.com/nonxe/oien",
   ACR_A: "ff489a0160188cf5f0750eaf486eee74",
   ACR_S: "ytu3AdkCu7fkRVuENhXxs9jsOW4YJtDXimAWMpJp",
   settingsMenu,

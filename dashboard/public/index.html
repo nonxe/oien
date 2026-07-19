@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OIEN🪐 — Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Decorative floating background elements -->
+  <div class="floating-bubble" style="top: 10%; left: 5%; font-size: 2.5rem; animation-delay: 0s;">☁️</div>
+  <div class="floating-bubble" style="top: 30%; right: 8%; font-size: 2.2rem; animation-delay: 2s;">🦢</div>
+  <div class="floating-bubble" style="top: 75%; left: 12%; font-size: 1.8rem; animation-delay: 4s;">✨</div>
+  <div class="floating-bubble" style="top: 85%; right: 15%; font-size: 2rem; animation-delay: 1s;">🪐</div>
+  <div class="floating-bubble" style="top: 50%; left: 80%; font-size: 2.4rem; animation-delay: 3s;">☁️</div>
+  <div class="floating-bubble" style="top: 60%; left: 4%; font-size: 1.5rem; animation-delay: 5s;">🌙</div>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-logo">
+        <h1>OIEN🪐</h1>
+        <div class="subtitle">‧₊˚ ☁️⋅♡𓂃 ࣪ ִֶָ☾. ᵎᵎ</div>
+      </div>
+      <div class="header-actions">
+        <button id="restart-btn" class="btn btn-danger">
+          <span>Reboot Bot</span> <span class="btn-icon">ᯓ★</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="status">
+        <span class="tab-icon">📊</span> Status
+      </button>
+      <button class="tab-btn" data-tab="config">
+        <span class="tab-icon">⚙️</span> Variables
+      </button>
+      <button class="tab-btn" data-tab="plugins">
+        <span class="tab-icon">📦</span> Commands
+      </button>
+    </nav>
+
+    <!-- Tab Contents -->
+    <main class="main-content">
+      
+      <!-- Status Tab -->
+      <section id="tab-status" class="tab-content active">
+        <div class="grid-status">
+          
+          <div class="card card-status">
+            <h3>System Status</h3>
+            <div class="status-indicator">
+              <span class="indicator-dot online"></span>
+              <span class="status-text">OIEN🪐 is running</span>
+            </div>
+            <div class="stats-list">
+              <div class="stat-item">
+                <span class="stat-label">Uptime</span>
+                <span id="stat-uptime" class="stat-value">Loading...</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Platform</span>
+                <span id="stat-platform" class="stat-value">Loading...</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-sessions">
+            <h3>WhatsApp Connected Accounts</h3>
+            <div id="sessions-container" class="sessions-list">
+              <!-- Dynamically populated -->
+              <p class="loading-placeholder">Loading sessions...</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card intro-card">
+          <div class="intro-decor">Swan Theme ‧°𓏲ּ𝄢</div>
+          <h2>Welcome to OIEN🪐 Panel</h2>
+          <p>
+            This dashboard lets you configure your WhatsApp bot in real time. 
+            All modifications made under the <b>Variables</b> tab are immediately applied in memory and persisted into the SQLite database (`bot.db`).
+          </p>
+          <div class="intro-footer">>⩊<.ᐟ — ᨳଓ</div>
+        </div>
+      </section>
+
+      <!-- Config Tab -->
+      <section id="tab-config" class="tab-content">
+        <div class="filter-bar card">
+          <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search variables... (.ᐟ.ᐟ)">
+            <span class="search-icon">🔍</span>
+          </div>
+          <div class="category-tabs">
+            <button class="cat-btn active" data-category="all">All</button>
+            <button class="cat-btn" data-category="identity">Bot Identity</button>
+            <button class="cat-btn" data-category="features">Auto Features</button>
+            <button class="cat-btn" data-category="security">Security</button>
+            <button class="cat-btn" data-category="messages">Replies</button>
+            <button class="cat-btn" data-category="advanced">Advanced</button>
+          </div>
+        </div>
+
+        <div id="config-grid" class="config-grid">
+          <!-- Dynamically generated variable cards -->
+          <p class="loading-placeholder">Loading variables...</p>
+        </div>
+      </section>
+
+      <!-- Plugins Tab -->
+      <section id="tab-plugins" class="tab-content">
+        <div class="card">
+          <div class="card-header-flex">
+            <h2>Command Reference</h2>
+            <div class="badge" id="commands-count">0 Commands</div>
+          </div>
+          <p class="info-text">Below are the commands registered in the bot. You can trigger them in WhatsApp using your configured command prefix.</p>
+          
+          <div class="search-box table-search">
+            <input type="text" id="plugin-search-input" placeholder="Filter commands...">
+            <span class="search-icon">🔍</span>
+          </div>
+
+          <div class="table-container">
+            <table class="plugins-table">
+              <thead>
+                <tr>
+                  <th>Command / Pattern</th>
+                  <th>Description</th>
+                  <th>Usage</th>
+                  <th>Permission</th>
+                </tr>
+              </thead>
+              <tbody id="plugins-tbody">
+                <!-- Dynamically populated -->
+                <tr>
+                  <td colspan="4" class="text-center">Loading commands...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Toast Notification container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div>OIEN🪐 WhatsApp Bot 🦢 ࣪ ִֶָ☾.࣪࿐</div>
+      <div>Designed for ease of hosting on local machine</div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

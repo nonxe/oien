@@ -1,157 +1,126 @@
-# Raganork-MD
-
+# ‧₊˚ ☁️⋅♡ OIEN🪐 — Sweet Themed WhatsApp Bot ♡⋅☁️ ࣪ ִֶָ☾.
 <p align="center">
-  <a href="https://rgnk.site">
-    <img src="https://i.ibb.co/QL4BQQ6/Untitled-1.png" alt="Get Session" width="300"/>
-  </a>
+  <b>⊹܀˙ ♰ OIEN🪐 WhatsApp Bot with Glassmorphism Localhost Dashboard ♰ ⊹܀˙</b>
 </p>
 
-A lightweight WhatsApp bot framework with multi-session support and extensive configuration options. Complete rewrite of the original Raganork project for better stability and performance.
+---
 
-## Get Started
+## 🪐 Overview
+**OIEN🪐** is a beautifully themed, high-performance, multi-device WhatsApp bot built on Baileys. It features a fully interactive, sweet-themed localhost web dashboard to monitor bot status, manage variables in real time, view command documentation, and trigger system reboots easily!
 
-#### 1. Get Your Session String
+## 🦢 Features
+- **🍬 Sweet Swan Theme** — Beautifully stylized bot replies and menus with `‧₊˚ ☁️⋅♡𓂃`, `🦢`, `🪐`, `ᯓ★` and more.
+- **🌐 Web Dashboard** — A gorgeous glassmorphic web dashboard hosted at `http://localhost:3000` to edit all configuration parameters dynamically.
+- **💾 SQLite DB Persistence** — Variables edited via the dashboard are automatically saved to `bot.db` and persist across restarts.
+- **⚡ Lightweight & Fast** — Built directly on `@whiskeysockets/baileys` with minimal overhead.
+- **📦 Large Feature Set** — Media downloaders (YouTube, Socials), conversion tools (Sticker, PDF), warning systems, group management, chatbot, and much more.
 
-<p align="center">
-  <a href="https://rgnk.site">
-    <img src="https://i.ibb.co/fVWcycPc/get-session.png" alt="Get Session" width="200"/>
-  </a>
-</p>
+---
 
-**Important for Cloud Deployments:** If you're deploying on platforms like Render, Koyeb, Railway, or similar cloud services, you'll need a `DATABASE_URL` (PostgreSQL) for persistent storage. VPS deployments can use local file storage.
+## 💻 Localhost Hosting Guide
 
-#### 2. Deploy and setup your bot
+Follow these steps to host **OIEN🪐** on your local machine:
 
-<p align="center">
-  <a href="https://rgnk.site">
-    <img src="https://i.ibb.co/fVsfPsjk/deploy-bot.png" alt="Get Session" width="200"/>
-  </a>
-</p>
+### 1. Prerequisites
+Before starting, make sure you have the following installed:
+- [Node.js](https://nodejs.org/) (Version 20 or higher)
+- [Git](https://git-scm.com/)
+- [FFmpeg](https://ffmpeg.org/) (Ensure it is added to your system's PATH)
 
-## Features
-
-- Lightweight and fast performance
-- Single and multi-session capabilities
-- Extensive plugin system
-- Group management tools
-- Media download functionality
-- Excellent caching and session management
-
-## Prerequisites
-
-- Node.js (version 20 or higher)
-- Git
-- FFmpeg
-- Yarn package manager
-- PM2 (for process management)
-- Database URL (postgreSQL - for cloud deployments)
-
-## Installation
-
-### Clone Repository
-
+### 2. Clone the Repository
+Clone the repository using git:
 ```bash
-npm install -g yarn pm2
-git clone https://github.com/souravkl11/raganork-md.git
-cd raganork-md
+git clone https://github.com/nonxe/oien.git
+cd oien
 ```
 
-### Install Dependencies
-
+### 3. Install Dependencies
+Install all package dependencies locally:
 ```bash
-yarn install
+npm install
 ```
 
-### Configuration
+### 4. Configure Your Bot
+1. Copy the template configuration file:
+   ```bash
+   cp config.env.example config.env
+   ```
+2. Open `config.env` in a text editor.
+3. Obtain your WhatsApp session ID using a session generator.
+4. Set the `SESSION` variable in `config.env`:
+   ```env
+   SESSION=RGNK~your_session_string_here
+   ```
 
-Create a `.env` file in the root directory:
-
-#### Session Configuration
-
-Single session:
-
-```
-SESSION=RGNK~d7a5s66
-```
-
-Multi-session:
-
-```
-SESSION=RGNK~d7a5s66,RGNK~7ad8cW
-```
-
-#### Required Variables
-
-```
-# Bot Configuration
-BOT_NAME=Your Bot Name
-HANDLERS=.,!
-SUDO=919876543210
-
-# Database (Required for cloud platforms)
-DATABASE_URL=your_database_url
-
-# Localization
-LANGUAGE=en
-TZ=Asia/Kolkata
-```
-
-## Running the Bot
-
+### 5. Start the Bot
+Run the start command:
 ```bash
 npm start
 ```
 
-## Process Management
+Once initialized, you will see a console message indicating:
+```text
+🪐 OIEN🪐 v6.2.30 🪐
+- Configured sessions: RGNK~your_session
+- Database initialized
+- Bot initialization complete.
 
-```bash
-# Stop bot
-pm2 stop raganork-md
-
-# Restart bot
-pm2 restart raganork-md
+🪐 OIEN🪐 Dashboard is running at http://localhost:3000
 ```
 
-## Commands
+### 6. Manage via Web Dashboard
+Open your browser and navigate to:
+👉 **[http://localhost:3000](http://localhost:3000)**
 
-Default prefix: `.`
-
-- `.list` – Show available commands
-- `.ping` – Check response time
-- `.restart` – Restart bot (sudo only)
-- `.shutdown` – Stop bot (sudo only)
-
-## File Structure
-
-```
-raganork-md/
-├── plugins/     # Bot plugins
-├── core/        # Core libraries
-├── output/      # Operational outputs
-├── temp/        # Temporary files
-├── config.js    # Configuration handler
-├── index.js     # Main entry point
-└── package.json # Dependencies
-```
-
-## Support
-
-- [Telegram Group](https://t.me/raganork_in)
-- [Official Website](https://raganork.live)
-
-## Legal Notice
-
-⚠️ **Use at your own risk.** This bot uses unofficial WhatsApp Web API methods and may result in temporary or permanent account bans.
-
-- This code is in no way affiliated, authorized, maintained, sponsored or endorsed by WhatsApp or any of its affiliates.
-- WhatsApp is a trademark of WhatsApp Inc., registered in the U.S. and other countries.
-- This software is provided for educational and research purposes only
-- Powered by [Baileys](https://github.com/WhiskeySockets/Baileys)
-
-## License
-
-GPL License - See LICENSE file for details.
+From this glassmorphic panel, you can:
+- **📊 Status**: Monitor uptime, platform, and connection status of WhatsApp accounts.
+- **⚙️ Variables**: Toggle auto features (like auto-read, auto-typing, always online) and modify bot configurations (like BOT_NAME, ALIVE messages, bad words, welcome templates) without editing files or restarting manually.
+- **📦 Commands**: View full documentation of all bot commands.
+- **ᯓ★ Reboot**: Restart the bot process with a single click.
 
 ---
 
-**Note:** Some files are obfuscated for security reasons and should not be modified.
+## ⚙️ Configuration Variables Reference
+Here are some key variables you can configure via `config.env` or directly through the Web Dashboard:
+
+| Variable | Default | Description |
+|---|---|---|
+| `SESSION` | `(required)` | Your WhatsApp session string (e.g. `RGNK~...`) |
+| `BOT_NAME` | `OIEN🪐` | The display name of the bot |
+| `MODE` | `private` | Bot availability: `public` (anyone can use) or `private` (only owner/sudo can use) |
+| `HANDLERS` | `.,` | Command prefixes (e.g. starting commands with `.` or `,`) |
+| `SUDO` | `""` | Phone numbers of users with owner permissions (comma-separated, without country code suffixes) |
+| `READ_MESSAGES` | `false` | Automatically read all incoming messages |
+| `READ_COMMAND` | `true` | Automatically read command messages |
+| `AUTO_READ_STATUS` | `false` | Automatically view WhatsApp status updates |
+| `ALWAYS_ONLINE` | `false` | Display your account as "always online" |
+| `ANTI_DELETE` | `false` | Keep and notify deleted messages in chats |
+| `PM_ANTISPAM` | `false` | Prevent spamming in Private Messages |
+
+---
+
+## 📂 File Structure
+```text
+oien/
+├── dashboard/        # Dashboard frontend (HTML, CSS, JS) and server API
+│   ├── server.js     # API endpoints and Express app
+│   └── public/       # Client-side static assets (Sweet theme)
+├── core/             # Bot core (Connection logic, session store, message parser)
+├── plugins/          # Command modules and functionality
+├── config.js         # Configuration loader & proxy
+├── config.env        # Local configuration file (ignored in git)
+├── index.js          # Main entry point
+└── package.json      # Dependencies and scripts
+```
+
+---
+
+## ⚠️ Legal Notice
+Use this software at your own risk. This bot uses unofficial WhatsApp API methods and is not affiliated, authorized, maintained, sponsored, or endorsed by WhatsApp or any of its affiliates.
+- WhatsApp is a registered trademark of WhatsApp Inc.
+- This codebase is powered by the [Baileys Library](https://github.com/WhiskeySockets/Baileys).
+
+---
+<p align="center">
+  <b>— ᨳଓ Developed for nonxe/oien >⩊<.ᐟ 🪐 ࣪ ִֶָ☾.࣪࿐</b>
+</p>

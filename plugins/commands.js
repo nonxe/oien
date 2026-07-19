@@ -315,20 +315,18 @@ Module(
       if (cmd_name) cmd_obj[type_det].push(cmd_name);
     }
 
+    const { runtime } = require("../core/functions");
+    const botUptime = runtime(process.uptime());
+
     let final = "";
     let i = 0;
     const handlerPrefix = HANDLERS !== "false" ? HANDLERS.split("")[0] : "";
     for (const n of types) {
+      const newn = n.charAt(0).toUpperCase() + n.slice(1);
+      final += `\n\n*⋆‧°𓏲ּ𝄢  ${newn.toUpperCase()}  — ᨳଓ*`;
       for (const x of cmd_obj[n]) {
         i = i + 1;
-        const newn = n.charAt(0).toUpperCase() + n.slice(1);
-        final += `${
-          final.includes(newn) ? "" : "\n\n╭════〘 *_`" + newn + "`_* 〙════⊷❍"
-        }\n┃${star}│ _\`${i}.\` ${handlerPrefix}${x.trim()}_${
-          cmd_obj[n]?.indexOf(x) === cmd_obj[n]?.length - 1
-            ? `\n┃${star}╰─────────────────❍\n╰══════════════════⊷❍`
-            : ""
-        }`;
+        final += `\n ᯓ★ \`${handlerPrefix}${x.trim()}\``;
       }
     }
 
@@ -337,32 +335,28 @@ Module(
     const total = bytesToSize(os.totalmem());
     const totalUsers = await getTotalUserCount();
     const infoParts = config.BOT_INFO.split(";");
-    const botName = infoParts[0] || "My Bot";
-    const botOwner = infoParts[1] || "N/A";
+    const botName = infoParts[0] || "OIEN🪐";
+    const botOwner = infoParts[1] || "nonxe";
     const botVersion = VERSION;
     let botImageLink = infoParts[2] || "";
     if (botImageLink === "default") {
       botImageLink = path.join(__dirname, "utils", "images", "default.png");
     }
 
-    const menu = `╭═══〘 \`${botName}\` 〙═══⊷❍
-┃${star}╭──────────────
-┃${star}│
-┃${star}│ _*\`Owner\`*_ : ${botOwner}
-┃${star}│ _*\`User\`*_ : ${message.senderName.replace(/[\r\n]+/gm, "")}
-┃${star}│ _*\`Mode\`*_ : ${MODE}
-┃${star}│ _*\`Server\`*_ : ${os.platform() === "linux" ? "Linux" : "Unknown OS"}
-┃${star}│ _*\`Available RAM\`*_ : ${used} of ${total}
-┃${star}│ _*\`Total Users\`*_ : ${totalUsers}
-┃${star}│ _*\`Version\`*_ : ${botVersion}
-┃${star}│
-┃${star}│
-┃${star}│  ▎▍▌▌▉▏▎▌▉▐▏▌▎
-┃${star}│  ▎▍▌▌▉▏▎▌▉▐▏▌▎
-┃${star}│   ${botName}
-┃${star}│
-┃${star}╰───────────────
-╰═════════════════⊷
+    const menu = `‧₊˚ ☁️⋅♡𓂃 ࣪ ִֶָ☾.
+*${botName}* 
+.𖥔 ݁ ˖🦢˚. ᵎᵎ
+
+ 🪐 *Owner* : ${botOwner}
+ 🪐 *User* : ${message.senderName.replace(/[\r\n]+/gm, "")}
+ 🪐 *Mode* : ${MODE}
+ 🪐 *Server* : ${os.platform() === "linux" ? "Linux" : "Windows/OS"}
+ 🪐 *Uptime* : ${botUptime}
+ 🪐 *RAM* : ${used} / ${total}
+ 🪐 *Total Users* : ${totalUsers}
+ 🪐 *Version* : ${botVersion}
+
+⋆.˚ ࣪ ִֶָ☾.࣪࿐ >⩊<.ᐟ ♰ ⊹܀˙
 
 ${cmdmenu}`;
     try {

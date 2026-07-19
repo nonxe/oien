@@ -23,15 +23,14 @@ const {
 async function main() {
   ensureTempDir();
   logger.info(`Created temporary directory at ${TEMP_DIR}`);
-  console.log(`Raganork v${require("./package.json").version}`);
+  console.log(`🪐 OIEN🪐 v${require("./package.json").version} 🪐`);
   console.log(`- Configured sessions: ${SESSION.join(", ")}`);
   logger.info(`Configured sessions: ${SESSION.join(", ")}`);
   if (SESSION.length === 0) {
     const warnMsg =
-      "⚠️ No sessions configured. Please set SESSION environment variable.";
+      "⚠️ No sessions configured. Please set SESSION in config.env or dashboard.";
     console.warn(warnMsg);
     logger.warn(warnMsg);
-    return;
   }
 
   try {
@@ -69,25 +68,10 @@ async function main() {
 
   initializeKickBot();
 
-  const startServer = () => {
-    const PORT = process.env.PORT || 3000;
-
-    const server = http.createServer((req, res) => {
-      if (req.url === "/health") {
-        res.writeHead(200, { "Content-Type": "text/plain" });
-        res.end("OK");
-      } else {
-        res.writeHead(200, { "Content-Type": "text/plain" });
-        res.end("Raganork Bot is running!");
-      }
-    });
-
-    server.listen(PORT, () => {
-      logger.info(`Web server listening on port ${PORT}`);
-    });
-  };
-
-  if (process.env.USE_SERVER !== "false") startServer();
+  if (process.env.USE_SERVER !== "false") {
+    const { startDashboard } = require("./dashboard/server");
+    startDashboard(botManager);
+  }
 }
 
 if (require.main === module) {
