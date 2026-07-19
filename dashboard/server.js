@@ -119,6 +119,44 @@ router.post('/config', async (req, res) => {
       value: String(value)
     });
 
+    if (key === 'SESSION' && botManagerInstance) {
+      const val = String(value);
+      const newSessions = val.split(",").map((s) => s.includes("~") ? s.split("~")[1].trim() : s.trim()).filter(Boolean);
+      
+      // 1. Disconnect removed sessions
+      for (const [sessionId, bot] of botManagerInstance.bots.entries()) {
+        if (!newSessions.includes(sessionId)) {
+          console.log(`[Dashboard] Dynamically disconnecting removed session: ${sessionId}`);
+          try {
+            bot.disconnect(false);
+            botManagerInstance.bots.delete(sessionId);
+          } catch (err) {
+            console.error(`[Dashboard] Error disconnecting session ${sessionId}:`, err);
+          }
+        }
+      }
+
+      // 2. Initialize newly added sessions
+      const { WhatsAppBot } = require('../core/bot');
+      for (const sessionId of newSessions) {
+        if (!botManagerInstance.bots.has(sessionId)) {
+          console.log(`[Dashboard] Dynamically initializing added session: ${sessionId}`);
+          (async () => {
+            try {
+              const bot = new WhatsAppBot(sessionId);
+              await bot.initialize();
+              if (bot.sock) {
+                botManagerInstance.bots.set(sessionId, bot);
+                console.log(`[Dashboard] Successfully initialized bot for session: ${sessionId}`);
+              }
+            } catch (err) {
+              console.error(`[Dashboard] Failed to dynamically initialize session ${sessionId}:`, err);
+            }
+          })();
+        }
+      }
+    }
+
     res.json({ success: true, key, value: finalValue });
   } catch (error) {
     res.status(500).json({ error: error.message });
