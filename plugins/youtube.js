@@ -3,12 +3,68 @@ const fs = require("fs");
 const path = require("path");
 const {
   downloadVideo,
-  downloadAudio,
+  downloadAudio: originalDownloadAudio,
   searchYoutube,
   getVideoInfo,
-  convertM4aToMp3,
+  convertM4aToMp3: originalConvertM4aToMp3,
 } = require("./utils/yt");
 const { spotifyTrack } = require("./utils/misc");
+const os = require("os");
+const ytdl = require("@distube/ytdl-core");
+const ffmpeg = require("fluent-ffmpeg");
+
+async function downloadAudio(url) {
+  try {
+    const info = await ytdl.getInfo(url);
+    const title = info.videoDetails.title.replace(/[\\/:*?"<>|]/g, "");
+    const tempPath = path.join(os.tmpdir(), `${Date.now()}_${title}.m4a`);
+    
+    return new Promise((resolve, reject) => {
+      const stream = ytdl(url, {
+        filter: "audioonly",
+        quality: "highestaudio"
+      });
+      
+      const writeStream = fs.createWriteStream(tempPath);
+      stream.pipe(writeStream);
+      
+      writeStream.on("finish", () => {
+        resolve({
+          path: tempPath,
+          title: title,
+          info: info
+        });
+      });
+      
+      writeStream.on("error", (err) => {
+        reject(err);
+      });
+      stream.on("error", (err) => {
+        reject(err);
+      });
+    });
+  } catch (error) {
+    console.error("Custom downloadAudio failed, falling back to obfuscated handler:", error);
+    return originalDownloadAudio(url);
+  }
+}
+
+function convertM4aToMp3(inputPath, metadata = {}) {
+  const outputPath = inputPath.replace(/\.m4a$/, ".mp3");
+  return new Promise((resolve, reject) => {
+    ffmpeg(inputPath)
+      .toFormat("mp3")
+      .audioBitrate(128)
+      .on("end", () => {
+        resolve(outputPath);
+      })
+      .on("error", (err) => {
+        console.error("Conversion to MP3 failed, sending original audio stream:", err);
+        resolve(inputPath);
+      })
+      .save(outputPath);
+  });
+}
 
 const config = require("../config");
 const MODE = config.MODE;
