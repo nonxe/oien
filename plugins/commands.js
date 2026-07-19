@@ -315,8 +315,18 @@ Module(
       if (cmd_name) cmd_obj[type_det].push(cmd_name);
     }
 
-    const { runtime } = require("../core/functions");
-    const botUptime = runtime(process.uptime());
+    const formatUptime = (seconds) => {
+      const days = Math.floor(seconds / 86400);
+      const hours = Math.floor((seconds % 86400) / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const secs = Math.floor(seconds % 60);
+
+      if (days > 0) return `${days}d ${hours}h ${minutes}m`;
+      if (hours > 0) return `${hours}h ${minutes}m`;
+      if (minutes > 0) return `${minutes}m ${secs}s`;
+      return `${secs}s`;
+    };
+    const botUptime = formatUptime(process.uptime());
 
     let final = "";
     let i = 0;
