@@ -11,7 +11,7 @@ suppressLibsignalLogs();
 const { initializeDatabase } = require("./core/database");
 const { BotManager } = require("./core/manager");
 const config = require("./config");
-const { SESSION, logger } = config;
+const { logger } = config;
 const http = require("http");
 const {
   ensureTempDir,
@@ -24,15 +24,8 @@ async function main() {
   ensureTempDir();
   logger.info(`Created temporary directory at ${TEMP_DIR}`);
   console.log(`🪐 OIEN🪐 v${require("./package.json").version} 🪐`);
-  console.log(`- Configured sessions: ${SESSION.join(", ")}`);
-  logger.info(`Configured sessions: ${SESSION.join(", ")}`);
-  if (SESSION.length === 0) {
-    const warnMsg =
-      "⚠️ No sessions configured. Please set SESSION in config.env or dashboard.";
-    console.warn(warnMsg);
-    logger.warn(warnMsg);
-  }
-
+  
+  // Wait to log configured sessions until AFTER database initialized
   try {
     await initializeDatabase();
     console.log("- Database initialized");
@@ -47,6 +40,15 @@ async function main() {
       dbError
     );
     process.exit(1);
+  }
+
+  console.log(`- Configured sessions: ${config.SESSION.join(", ")}`);
+  logger.info(`Configured sessions: ${config.SESSION.join(", ")}`);
+  if (config.SESSION.length === 0) {
+    const warnMsg =
+      "⚠️ No sessions configured. Please set SESSION in config.env or dashboard.";
+    console.warn(warnMsg);
+    logger.warn(warnMsg);
   }
 
   const botManager = new BotManager();

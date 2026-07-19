@@ -1,5 +1,6 @@
 const { WhatsAppBot } = require("./bot");
-const { logger, SESSION } = require('../config');
+const config = require('../config');
+const { logger } = config;
 const { sequelize } = require("./database");
 const { CustomAuthState } = require("./auth");
 const { flushQueueOnShutdown, stopFlushTimer } = require("./store");
@@ -10,9 +11,9 @@ class BotManager {
     }
 
     async initializeBots() {
-        logger.info({ sessions: SESSION }, `Initializing all configured bots.`);
-        await CustomAuthState.deleteGarbageSessions(SESSION);        
-        for (const sessionId of SESSION) {
+        logger.info({ sessions: config.SESSION }, `Initializing all configured bots.`);
+        await CustomAuthState.deleteGarbageSessions(config.SESSION);        
+        for (const sessionId of config.SESSION) {
             try {
                 logger.info({ session: sessionId }, `Attempting to initialize bot for session.`);
                 const bot = new WhatsAppBot(sessionId);
