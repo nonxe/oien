@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Categorize variables for filtering
   function getCategory(key) {
     const k = key.toUpperCase();
-    const identityKeys = ['BOT_NAME', 'BOT_INFO', 'STICKER_DATA', 'STICKER_PACK', 'STICKER_AUTHOR', 'OWNER_NAME', 'OWNER_NUMBER', 'SUPPORT_GROUP', 'VERSION'];
+    const identityKeys = ['SESSION', 'BOT_NAME', 'BOT_INFO', 'STICKER_DATA', 'STICKER_PACK', 'STICKER_AUTHOR', 'OWNER_NAME', 'OWNER_NUMBER', 'SUPPORT_GROUP', 'VERSION'];
     const featureKeys = ['READ_MESSAGES', 'READ_COMMAND', 'AUTO_READ_STATUS', 'ALWAYS_ONLINE', 'CMD_REACTION', 'AUTO_BIO', 'AUTO_TYPING', 'AUTO_RECORDING', 'AUTO_REACT', 'AUTO_STATUS_SEEN'];
     const securityKeys = ['PM_ANTISPAM', 'PMB_VAR', 'DIS_PM', 'ANTI_BOT', 'ANTI_DELETE', 'REJECT_CALLS', 'ANTILINK', 'ANTIBADWORD', 'ANTISPAM_COUNT', 'WARN', 'ALLOWED', 'NOT_ALLOWED', 'BLOCK_CHAT', 'ALLOWED_CALLS', 'BAD_WORDS'];
     const replyKeys = ['ALIVE', 'ALIVE_MSG', 'ALIVE_IMG', 'PMB', 'WELCOME_MSG', 'GOODBYE_MSG', 'AUTOMUTE_MSG', 'AUTOUNMUTE_MSG', 'CALL_REJECT_MESSAGE'];

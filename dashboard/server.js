@@ -60,6 +60,20 @@ router.get('/config', async (req, res) => {
       };
     }
 
+    // Explicitly add SESSION raw string
+    let rawSession = '';
+    const dbSessionVar = await BotVariable.findOne({ where: { key: 'SESSION' } });
+    if (dbSessionVar) {
+      rawSession = dbSessionVar.value;
+    } else {
+      rawSession = process.env.SESSION || process.env.SESSION_ID || '';
+    }
+    responseData['SESSION'] = {
+      value: rawSession,
+      source: dbSessionVar ? 'database' : (process.env.SESSION || process.env.SESSION_ID ? 'environment' : 'config'),
+      isBoolean: false
+    };
+
     res.json(responseData);
   } catch (error) {
     res.status(500).json({ error: error.message });

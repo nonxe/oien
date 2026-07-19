@@ -290,6 +290,17 @@ const config = new Proxy(baseConfig, {
       return mode === 'private';
     }
 
+    if (key === 'SESSION') {
+      const val = dynamicValues.has('SESSION') ? dynamicValues.get('SESSION') : (dynamicValues.has('SESSION_ID') ? dynamicValues.get('SESSION_ID') : null);
+      if (val) {
+        if (typeof val === 'string') {
+          return val.split(",").map((s) => s.includes("~") ? s.split("~")[1].trim() : s.trim()).filter(Boolean);
+        }
+        if (Array.isArray(val)) return val;
+      }
+      return target.SESSION;
+    }
+
     if (dynamicValues.has(key)) {
       return dynamicValues.get(key);
     }
