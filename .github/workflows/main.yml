@@ -1,0 +1,39 @@
+name: OIEN WhatsApp Bot
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    # Run every 5 hours to bypass the GitHub Actions 6-hour runtime limit
+    - cron: '0 */5 * * *'
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg libwebp-dev
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install project dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Run WhatsApp Bot
+        env:
+          SESSION: ${{ secrets.SESSION }}
+          BOT_NAME: ${{ secrets.BOT_NAME }}
+          MODE: ${{ secrets.MODE }}
+          SUDO: ${{ secrets.SUDO }}
+        run: npm start
