@@ -4,6 +4,16 @@ if (fs.existsSync("./config.env")) {
   require("dotenv").config({ path: "./config.env" });
 }
 
+try {
+  const ffmpeg = require("fluent-ffmpeg");
+  const ffmpegPath = require("ffmpeg-static");
+  if (ffmpegPath) {
+    ffmpeg.setFfmpegPath(ffmpegPath);
+  }
+} catch (e) {
+  console.warn("Could not load/set ffmpeg-static path:", e.message);
+}
+
 const { suppressLibsignalLogs } = require("./core/helpers");
 
 suppressLibsignalLogs();
