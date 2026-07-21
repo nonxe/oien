@@ -1105,3 +1105,107 @@ Module(
     }
   }
 );
+
+Module(
+  {
+    pattern: "ytd ?(.*)",
+    fromMe: fromMe,
+    desc: "Download YouTube video using David Cyril API",
+    usage: ".ytd <youtube link>",
+    use: "download",
+  },
+  async (message, match) => {
+    const axios = require("axios");
+    let url = (match[1] || "").trim();
+
+    // If no URL was provided directly, try to get it from a replied message
+    if (!url && message.reply_message && message.reply_message.text) {
+      url = message.reply_message.text.trim();
+    }
+
+    if (!url) {
+      return await message.sendReply(
+        `*🎥 YTD — YouTube Video Downloader*\n\n` +
+        `*Usage:* \`.ytd <youtube link>\`\n` +
+        `_Or reply to a link with \`.ytd\`_`
+      );
+    }
+
+    // Basic URL validation
+    if (!/https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//i.test(url)) {
+      return await message.sendReply("_⚠️ Please provide a valid YouTube link._");
+    }
+
+    let downloadMsg = await message.sendReply("_Processing..._");
+
+    try {
+      const apiEndpoint = `https://apis.davidcyril.name.ng/download/ytmp4?url=${encodeURIComponent(url)}`;
+      const response = await axios.get(apiEndpoint, { timeout: 35000 });
+
+      if (!response.data || response.data.success !== true || !response.data.result) {
+        return await message.edit(
+          "_Failed to fetch video download link!_",
+          message.jid,
+          downloadMsg.key
+        );
+      }
+
+      const { title, thumbnail, quality, download_url } = response.data.result;
+
+      // Edit message to "Downloading"
+      await message.edit(
+        `_Downloading *${title}* (${quality})..._`,
+        message.jid,
+        downloadMsg.key
+      );
+
+      // Download the video buffer from download_url
+      const videoRes = await axios.get(download_url, {
+        responseType: "arraybuffer",
+        timeout: 60000,
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        }
+      });
+
+      const videoBuffer = Buffer.from(videoRes.data, "binary");
+
+      // Edit message to "Sending"
+      await message.edit(
+        `_Sending *${title}*..._`,
+        message.jid,
+        downloadMsg.key
+      );
+
+      // Send video on WhatsApp
+      await message.sendMessage(
+        videoBuffer,
+        "video",
+        {
+          caption: `📌 *Title:* ${title}\n⚙️ *Quality:* ${quality}\n🔗 *Link:* ${url}`,
+          quoted: message.data
+        }
+      );
+
+      // Delete/update status message
+      await message.edit(
+        `_Downloaded *${title}* successfully!_`,
+        message.jid,
+        downloadMsg.key
+      );
+
+    } catch (error) {
+      console.error("YTD command error:", error);
+      if (downloadMsg) {
+        await message.edit(
+          `❌ *Download failed!*\n_Error: ${error.message}_`,
+          message.jid,
+          downloadMsg.key
+        );
+      } else {
+        await message.sendReply(`❌ *Download failed:* ${error.message}`);
+      }
+    }
+  }
+);
+
