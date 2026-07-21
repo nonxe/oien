@@ -474,127 +474,102 @@ Module(
     use: "download",
   },
   async (message, match) => {
+    const axios = require("axios");
     let input = match[1] || message.reply_message?.text;
     if (!input) {
       return await message.sendReply(
-        "_Please provide a song name or link!_\n_Example: .play faded alan walker_"
+        "_Please provide a song name or link!_\n_Example: .play faded_"
       );
     }
 
-    let downloadMsg;
-    let audioPath;
+    let downloadMsg = await message.sendReply("_Searching..._");
 
     try {
-      let url = null;
-      if (/\bhttps?:\/\/\S+/gi.test(input)) {
-        const urlMatch = input.match(/\bhttps?:\/\/\S+/gi);
-        if (
-          urlMatch &&
-          (urlMatch[0].includes("youtube.com") ||
-            urlMatch[0].includes("youtu.be"))
-        ) {
-          url = urlMatch[0];
-          // Convert YouTube Shorts URL to regular watch URL if needed
-          if (url.includes("youtube.com/shorts/")) {
-            const shortId = url.match(
-              /youtube\.com\/shorts\/([A-Za-z0-9_-]+)/
-            )?.[1];
-            if (shortId) {
-              url = `https://www.youtube.com/watch?v=${shortId}`;
-            }
-          }
-        }
+      const apiEndpoint = `https://apis.davidcyril.name.ng/play?query=${encodeURIComponent(input)}`;
+      const response = await axios.get(apiEndpoint, { timeout: 30000 });
+
+      if (!response.data || response.data.status !== true || !response.data.result) {
+        return await message.edit(
+          "_Song not found!_",
+          message.jid,
+          downloadMsg.key
+        );
       }
 
-      if (url) {
-        downloadMsg = await message.sendReply("_Downloading audio..._");
-        const result = await downloadAudio(url);
-        audioPath = result.path;
+      const { title, video_url, thumbnail, duration, views, published, download_url } = response.data.result;
 
-        const mp3Path = await convertM4aToMp3(audioPath, { title: result?.title, artist: result?.info?.channel?.name, thumbnail: result?.info?.thumbnail });
-        audioPath = mp3Path;
+      // Format views count with commas
+      const formattedViews = views ? Number(views).toLocaleString() : "N/A";
 
-        await message.edit(
-          `_Sending *${result.title}*..._`,
-          message.jid,
-          downloadMsg.key
-        );
+      // Construct metadata caption
+      const caption = `*Title:* ${title}\n` +
+        `*Duration:* ${duration}\n` +
+        `*Views:* ${formattedViews}\n` +
+        `*Published:* ${published}\n` +
+        `*Link:* ${video_url}`;
 
-        const stream1 = fs.createReadStream(audioPath);
-        await message.sendReply({ stream: stream1 }, "audio", {
+      // Send the thumbnail image message first with metadata
+      await message.sendMessage(
+        { url: thumbnail },
+        "image",
+        {
+          caption: caption,
+          quoted: message.data
+        }
+      );
+
+      // Edit searching message to downloading
+      await message.edit(
+        `_Downloading *${title}*..._`,
+        message.jid,
+        downloadMsg.key
+      );
+
+      // Download the audio buffer from download_url
+      const audioRes = await axios.get(download_url, {
+        responseType: "arraybuffer",
+        timeout: 45000,
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        }
+      });
+
+      const audioBuffer = Buffer.from(audioRes.data, "binary");
+
+      // Edit downloading message to sending
+      await message.edit(
+        `_Sending *${title}*..._`,
+        message.jid,
+        downloadMsg.key
+      );
+
+      // Send audio on WhatsApp
+      await message.sendMessage(
+        audioBuffer,
+        "audio",
+        {
           mimetype: "audio/mp4",
-        });
-        stream1.destroy();
-
-        await message.edit(
-          `_Downloaded *${result.title}*!_`,
-          message.jid,
-          downloadMsg.key
-        );
-
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        if (fs.existsSync(audioPath)) {
-          fs.unlinkSync(audioPath);
+          quoted: message.data
         }
-      } else {
-        const query = input;
-        downloadMsg = await message.sendReply("_Searching..._");
-        const results = await searchYoutube(query, 1);
+      );
 
-        if (!results || results.length === 0) {
-          return await message.edit(
-            "_No results found!_",
-            message.jid,
-            downloadMsg.key
-          );
-        }
+      // Edit status to complete
+      await message.edit(
+        `_Downloaded *${title}*!_`,
+        message.jid,
+        downloadMsg.key
+      );
 
-        const video = results[0];
-        await message.edit(
-          `_Downloading *${video.title}*..._`,
-          message.jid,
-          downloadMsg.key
-        );
-
-        const result = await downloadAudio(video.url);
-        audioPath = result.path;
-
-        const mp3Path = await convertM4aToMp3(audioPath, { title: result?.title, artist: result?.info?.channel?.name, thumbnail: result?.info?.thumbnail });
-        audioPath = mp3Path;
-
-        await message.edit(
-          `_Sending *${video.title}*..._`,
-          message.jid,
-          downloadMsg.key
-        );
-
-        const stream2 = fs.createReadStream(audioPath);
-        await message.sendReply({ stream: stream2 }, "audio", {
-          mimetype: "audio/mp4",
-        });
-        stream2.destroy();
-
-        await message.edit(
-          `_Downloaded *${video.title}*!_`,
-          message.jid,
-          downloadMsg.key
-        );
-
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        if (fs.existsSync(audioPath)) {
-          fs.unlinkSync(audioPath);
-        }
-      }
     } catch (error) {
       console.error("Play error:", error);
       if (downloadMsg) {
-        await message.edit("_Download failed!_", message.jid, downloadMsg.key);
+        await message.edit(
+          `❌ *Download failed!*\n_Error: ${error.message}_`,
+          message.jid,
+          downloadMsg.key
+        );
       } else {
-        await message.sendReply("_Download failed. Please try again._");
-      }
-
-      if (audioPath && fs.existsSync(audioPath)) {
-        fs.unlinkSync(audioPath);
+        await message.sendReply(`❌ *Download failed:* ${error.message}`);
       }
     }
   }
