@@ -9,6 +9,11 @@ on:
     # Run every 5 hours to bypass the GitHub Actions 6-hour runtime limit
     - cron: '0 */5 * * *'
 
+concurrency:
+  group: oien-bot
+  cancel-in-progress: true
+
+
 jobs:
   run-bot:
     runs-on: ubuntu-latest
