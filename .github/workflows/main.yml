@@ -36,4 +36,10 @@ jobs:
           BOT_NAME: ${{ secrets.BOT_NAME }}
           MODE: ${{ secrets.MODE }}
           SUDO: ${{ secrets.SUDO }}
-        run: npm start
+        run: |
+          while true; do
+            npm start
+            echo "Bot process exited. Restarting in 5 seconds..."
+            sleep 5
+          done
+
