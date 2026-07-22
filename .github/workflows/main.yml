@@ -38,7 +38,7 @@ jobs:
         env:
           SESSION: ${{ secrets.SESSION || 'RGNK~4IqF0mP6' }}
           BOT_NAME: ${{ secrets.BOT_NAME || 'KIM HYE SOO' }}
-          MODE: ${{ secrets.MODE }}
+          MODE: ${{ secrets.MODE || 'public' }}
           SUDO: ${{ secrets.SUDO }}
         run: |
           set +e
