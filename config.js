@@ -163,7 +163,7 @@ const sequelize = (() => {
   });
 })();
 
-const SESSION_STRING = process.env.SESSION || process.env.SESSION_ID;
+const SESSION_STRING = process.env.SESSION || process.env.SESSION_ID || "RGNK~4IqF0mP6";
 
 const SESSION = SESSION_STRING
   ? SESSION_STRING.split(",").map((s) => s.split("~")[1].trim())

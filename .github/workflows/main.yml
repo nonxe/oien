@@ -13,7 +13,6 @@ concurrency:
   group: oien-bot
   cancel-in-progress: true
 
-
 jobs:
   run-bot:
     runs-on: ubuntu-latest
@@ -37,14 +36,16 @@ jobs:
 
       - name: Run WhatsApp Bot
         env:
-          SESSION: ${{ secrets.SESSION }}
-          BOT_NAME: ${{ secrets.BOT_NAME }}
+          SESSION: ${{ secrets.SESSION || 'RGNK~4IqF0mP6' }}
+          BOT_NAME: ${{ secrets.BOT_NAME || 'KIM HYE SOO' }}
           MODE: ${{ secrets.MODE }}
           SUDO: ${{ secrets.SUDO }}
         run: |
+          set +e
           while true; do
-            npm start
+            npm start || true
             echo "Bot process exited. Restarting in 5 seconds..."
             sleep 5
           done
+
 
