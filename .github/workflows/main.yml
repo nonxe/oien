@@ -34,18 +34,16 @@ jobs:
       - name: Install project dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Run WhatsApp Bot
+      - name: Run WhatsApp Bot Multi-Session Manager
         env:
           SESSION: ${{ secrets.SESSION || 'RGNK~4IqF0mP6' }}
-          BOT_NAME: ${{ secrets.BOT_NAME || 'KIM HYE SOO' }}
+          BOT_NAME: ${{ secrets.BOT_NAME || 'OIEN BOT' }}
           MODE: ${{ secrets.MODE || 'public' }}
           SUDO: ${{ secrets.SUDO }}
         run: |
           set +e
           while true; do
-            npm start || true
+            node multi-runner.js || true
             echo "Bot process exited. Restarting in 5 seconds..."
             sleep 5
           done
-
-
