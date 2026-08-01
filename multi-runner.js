@@ -2,6 +2,14 @@ const fs = require("fs");
 const { spawn } = require("child_process");
 
 async function startBotRunner() {
+  // Always remove stale bot.db to ensure new SESSION ID initializes cleanly
+  if (fs.existsSync("./bot.db")) {
+    try {
+      fs.unlinkSync("./bot.db");
+      console.log("Cleaned up stale bot.db file.");
+    } catch (e) {}
+  }
+
   let sessionConfig = null;
   try {
     if (fs.existsSync("./sessions.json")) {
