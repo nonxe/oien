@@ -1,55 +1,44 @@
 const fs = require("fs");
 const { spawn } = require("child_process");
 
-async function runAllSessions() {
-  let sessions = [];
+async function runSession() {
+  let sessionConfig = null;
   try {
     if (fs.existsSync("./sessions.json")) {
       const content = fs.readFileSync("./sessions.json", "utf-8");
-      sessions = JSON.parse(content);
+      const parsed = JSON.parse(content);
+      if (Array.isArray(parsed)) {
+        sessionConfig = parsed[0] || null;
+      } else {
+        sessionConfig = parsed;
+      }
     }
   } catch (e) {
     console.error("Error reading sessions.json:", e);
   }
 
-  if (!Array.isArray(sessions) || sessions.length === 0) {
-    const defaultSession = process.env.SESSION || "RGNK~4IqF0mP6";
-    sessions = [
-      {
-        id: "default",
-        sessionId: defaultSession,
-        botName: process.env.BOT_NAME || "OIEN BOT",
-        sudo: process.env.SUDO || "",
-        mode: process.env.MODE || "public",
-        status: "active",
-      },
-    ];
-  }
+  const sessionId = sessionConfig?.sessionId || process.env.SESSION || "RGNK~4IqF0mP6";
+  const botName = sessionConfig?.botName || process.env.BOT_NAME || "OIEN BOT";
+  const sudo = sessionConfig?.sudo || process.env.SUDO || "";
+  const mode = sessionConfig?.mode || process.env.MODE || "public";
 
-  const activeSessions = sessions.filter((s) => s.status !== "inactive" && s.sessionId);
-  console.log(`Starting ${activeSessions.length} WhatsApp Bot Sessions...`);
+  console.log(`==========================================`);
+  console.log(`Starting OIEN WhatsApp Bot Session`);
+  console.log(`Bot Name: ${botName}`);
+  console.log(`Session ID: ${sessionId.slice(0, 14)}...`);
+  console.log(`Mode: ${mode}`);
+  console.log(`==========================================`);
 
-  if (activeSessions.length === 0) {
-    console.log("No active sessions found in sessions.json.");
-    return;
-  }
+  const env = {
+    ...process.env,
+    SESSION: sessionId,
+    BOT_NAME: botName,
+    MODE: mode,
+    SUDO: sudo,
+  };
 
-  const processes = [];
-  for (const s of activeSessions) {
-    console.log(`Starting bot session: ${s.botName || s.id} [${s.sessionId.slice(0, 12)}...]`);
-    const env = {
-      ...process.env,
-      SESSION: s.sessionId,
-      BOT_NAME: s.botName || "OIEN BOT",
-      MODE: s.mode || "public",
-      SUDO: s.sudo || process.env.SUDO || "",
-    };
-
-    const child = spawn("npm", ["start"], { env, stdio: "inherit" });
-    processes.push(child);
-  }
-
-  await Promise.all(processes.map((p) => new Promise((resolve) => p.on("exit", resolve))));
+  const child = spawn("npm", ["start"], { env, stdio: "inherit" });
+  await new Promise((resolve) => child.on("exit", resolve));
 }
 
-runAllSessions();
+runSession();
