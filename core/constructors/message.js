@@ -68,7 +68,7 @@ class Message extends Base {
     this.fromOwner =
       data.key.fromMe || senderNumeric === botNumeric || isSudoUser;
 
-    this.senderName = data.pushName;
+    this.senderName = data.pushName || "User";
     this.myjid = botNumeric;
     this.message =
       data.message?.extendedTextMessage?.text ??

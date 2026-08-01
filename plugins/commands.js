@@ -358,7 +358,7 @@ Module(
 .𖥔 ݁ ˖🦢˚. ᵎᵎ
 
  🪐 *Owner* : ${botOwner}
- 🪐 *User* : ${message.senderName.replace(/[\r\n]+/gm, "")}
+ 🪐 *User* : ${(message.senderName || "User").replace(/[\r\n]+/gm, "")}
  🪐 *Mode* : ${MODE}
  🪐 *Server* : ${os.platform() === "linux" ? "Linux" : "Windows/OS"}
  🪐 *Uptime* : ${botUptime}
